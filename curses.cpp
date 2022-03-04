@@ -1,2 +1,16 @@
 #include <curses.h>
-#include "curses"
+#include "curses.hpp"
+
+namespace curses
+{
+
+window::window()
+{
+
+}
+
+window::~window()
+{
+}
+
+}

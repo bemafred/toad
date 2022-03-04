@@ -1,1 +1,1 @@
-c++ toad.cpp -o toad
+c++ curses.cpp toad.cpp -o toad
