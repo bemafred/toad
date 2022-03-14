@@ -1,11 +1,11 @@
+
 #include <stdlib.h>
 #include <curses.h>
 #include <signal.h>
 
 static void finish(int sig);
 
-int
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     int num = 0;
 
@@ -17,7 +17,8 @@ main(int argc, char *argv[])
     keypad(stdscr, TRUE);  /* enable keyboard mapping */
     (void) nonl();         /* tell curses not to do NL->CR/NL on output */
     (void) cbreak();       /* take input chars one at a time, no wait for \n */
-    (void) echo();         /* echo input - in color */
+    //(void) echo();         /* echo input - in color */
+    (void) noecho();
 
     if (has_colors())
     {
@@ -38,10 +39,28 @@ main(int argc, char *argv[])
         init_pair(7, COLOR_WHITE,   COLOR_BLACK);
     }
 
+
+    int row=1, col=0;
+
+    mvprintw(0, 0, "COLS = %d, LINES = %d", COLS, LINES);
+
     for (;;)
     {
-        int c = getch();     /* refresh, accept single keystroke of input */
+	int ch = mvgetch(row, col);     /* refresh, accept single keystroke of input */
+
+	if (ch == KEY_RESIZE)
+	{
+		clear();
+            	mvprintw(0, 0, "COLS = %d, LINES = %d", COLS, LINES);
+            	//for (int i = 0; i < COLS; i++)
+                //	mvaddch(1, i, '*');
+            	refresh();
+		continue;
+	}
+
         attrset(COLOR_PAIR(num % 8));
+	mvaddch(row, col++, ch);
+        refresh();
         num++;
 
         /* process the command keystroke */
@@ -52,6 +71,8 @@ main(int argc, char *argv[])
 
 static void finish(int sig)
 {
+    clear();
+    refresh();
     endwin();
 
     /* do your non-curses wrapup here */
