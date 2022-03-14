@@ -11,14 +11,14 @@ int main(int argc, char *argv[])
 
     /* initialize your non-curses data structures here */
 
-    (void) signal(SIGINT, finish);      /* arrange interrupts to terminate */
+    (void)signal(SIGINT, finish); /* arrange interrupts to terminate */
 
-    (void) initscr();      /* initialize the curses library */
-    keypad(stdscr, TRUE);  /* enable keyboard mapping */
-    (void) nonl();         /* tell curses not to do NL->CR/NL on output */
-    (void) cbreak();       /* take input chars one at a time, no wait for \n */
+    (void)initscr();      /* initialize the curses library */
+    keypad(stdscr, TRUE); /* enable keyboard mapping */
+    (void)nonl();         /* tell curses not to do NL->CR/NL on output */
+    (void)cbreak();       /* take input chars one at a time, no wait for \n */
     //(void) echo();         /* echo input - in color */
-    (void) noecho();
+    (void)noecho();
 
     if (has_colors())
     {
@@ -30,43 +30,108 @@ int main(int argc, char *argv[])
          * pair as for the foreground color, though of course that is not
          * necessary:
          */
-        init_pair(1, COLOR_RED,     COLOR_BLACK);
-        init_pair(2, COLOR_GREEN,   COLOR_BLACK);
-        init_pair(3, COLOR_YELLOW,  COLOR_BLACK);
-        init_pair(4, COLOR_BLUE,    COLOR_BLACK);
-        init_pair(5, COLOR_CYAN,    COLOR_BLACK);
+        init_pair(1, COLOR_RED, COLOR_BLACK);
+        init_pair(2, COLOR_GREEN, COLOR_BLACK);
+        init_pair(3, COLOR_YELLOW, COLOR_BLACK);
+        init_pair(4, COLOR_BLUE, COLOR_BLACK);
+        init_pair(5, COLOR_CYAN, COLOR_BLACK);
         init_pair(6, COLOR_MAGENTA, COLOR_BLACK);
-        init_pair(7, COLOR_WHITE,   COLOR_BLACK);
+        init_pair(7, COLOR_WHITE, COLOR_BLACK);
     }
 
-
-    int row=1, col=0;
+    int row = 1, col = 0;
 
     mvprintw(0, 0, "COLS = %d, LINES = %d", COLS, LINES);
 
     for (;;)
     {
-	int ch = mvgetch(row, col);     /* refresh, accept single keystroke of input */
+        int ch = mvgetch(row, col); /* refresh, accept single keystroke of input */
+        mvprintw(0, 0, "COLS = %d, LINES = %d, KEY = %d", COLS, LINES, ch);
 
-	if (ch == KEY_RESIZE)
-	{
-		clear();
-            	mvprintw(0, 0, "COLS = %d, LINES = %d", COLS, LINES);
-            	//for (int i = 0; i < COLS; i++)
-                //	mvaddch(1, i, '*');
-            	refresh();
-		continue;
-	}
+        switch (ch)
+        {
+            case KEY_RESIZE:
+            {
+                clear();
+                mvprintw(0, 0, "COLS = %d, LINES = %d, KEY = %d", COLS, LINES, ch);
+                refresh();
+                break;
+            }
 
-        attrset(COLOR_PAIR(num % 8));
-	mvaddch(row, col++, ch);
-        refresh();
-        num++;
+            case 13:
+            case KEY_ENTER:
+            {
+                row = row + 1;
+                col = 0;
+                break;
+            }
 
-        /* process the command keystroke */
+            case KEY_LEFT:
+            {
+                if (col > 0) 
+                    col--;
+                break;
+            }
+
+            case KEY_RIGHT:
+            {
+                if (col < COLS) 
+                    col++;
+                break;
+            }
+
+            case KEY_UP:
+            {
+                if (row > 0) 
+                    row--;
+                break;
+            }
+
+            case KEY_DOWN:
+            {
+                if (row < LINES) 
+                    row++;
+                break;
+            }
+
+            case KEY_HOME:
+            {
+                col = 0;
+                break;
+            }
+
+            case KEY_END:
+            {
+                break;
+            }
+
+            case KEY_BACKSPACE:
+            {
+                break;
+            }
+
+            case KEY_PPAGE:
+            {
+                break;
+            }
+
+            case KEY_NPAGE:
+            {
+                break;
+            }
+
+            default:
+            {
+                attrset(COLOR_PAIR(num % 8));
+                mvaddch(row, col++, ch);
+                refresh();
+                num++;
+                break;
+            }
+        }
     }
 
-    finish(0);               /* we are done */
+    finish(0); /* we are done */
 }
 
 static void finish(int sig)
