@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
             }
 
             case 13:
-            case KEY_ENTER:
+            //case KEY_ENTER:
             {
                 row = row + 1;
                 col = 0;
@@ -68,28 +68,28 @@ int main(int argc, char *argv[])
 
             case KEY_LEFT:
             {
-                if (col > 0) 
+                if (col > 0)
                     col--;
                 break;
             }
 
             case KEY_RIGHT:
             {
-                if (col < COLS) 
+                if (col < COLS)
                     col++;
                 break;
             }
 
             case KEY_UP:
             {
-                if (row > 0) 
+                if (row > 0)
                     row--;
                 break;
             }
 
             case KEY_DOWN:
             {
-                if (row < LINES) 
+                if (row < LINES)
                     row++;
                 break;
             }
@@ -107,6 +107,8 @@ int main(int argc, char *argv[])
 
             case KEY_BACKSPACE:
             {
+		if (col > 0)
+		   col--;
                 break;
             }
 
