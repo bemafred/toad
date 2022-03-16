@@ -1,5 +1,5 @@
-toad: main.cpp
-	c++ main.cpp -lncurses -o toad
+toad: ./source/main.cpp
+	c++ ./source/main.cpp -lncurses -o toad
 
 run: toad
 	./toad
