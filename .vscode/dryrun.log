@@ -1,0 +1,5 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/bemafred/src/repos/toad'
+c++ ./source/main.cpp -lncurses -o toad
+make: Leaving directory '/home/bemafred/src/repos/toad'
+ 
